@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<cmath>
+#include<glut.h>
+int p1[] = { 100,100 }, p2[] = { 300,100 }, p3[] = { 200,400 }, p4[] = { 100,50 }, p5[] = { 300,50 };
+void myinit()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0, 500, 0, 500);
+	glMatrixMode(GL_MODELVIEW);
+
+}
+void disp()
+{
+	glClearColor(1, 1, 1, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1, 0, 0);
+	glPointSize(5);
+	glBegin(GL_TRIANGLES);
+	glVertex2iv(p1);
+	glVertex2iv(p2);
+	glVertex2iv(p3);
+	//glVertex2iv(p4);
+	//glVertex2iv(p5);
+	glEnd();
+	glColor3f(0, 1, 0);
+	glBegin(GL_POLYGON);
+	glVertex2iv(p1);
+	glVertex2iv(p2);
+	glVertex2iv(p5);
+	//glVertex2iv(p4);
+	glVertex2iv(p4);
+	glEnd();
+	glFlush();
+}
+int main()
+{
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowSize(500, 500);
+	glutInitWindowPosition(300, 150);
+	glutCreateWindow("triangle");
+	myinit();
+	glutDisplayFunc(disp);
+	glutMainLoop();
+	return 0;
+}
