@@ -1,46 +1,57 @@
+#include<stdlib.h> 
 #include<stdio.h>
-#include<cmath>
-#include<glut.h>
-int p1[] = { 100,100 }, p2[] = { 300,100 }, p3[] = { 200,400 }, p4[] = { 100,50 }, p5[] = { 300,50 };
+#include<GL/glut.h> 
+#include<math.h>
+float p[9][2] = { {20,20}, {40,40}, {60,20} }; 
+float xp, yp, theta, rtheta;
+
 void myinit()
 {
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(0, 500, 0, 500);
+	glLoadIdentity(); 
+	gluOrtho2D(-100, 100, -100, 100);
 	glMatrixMode(GL_MODELVIEW);
 
 }
-void disp()
+void drawtraiangle()
 {
+	glBegin(GL_TRIANGLES);
+	glVertex2fv(p[0]);
+	glVertex2fv(p[1]);
+	glVertex2fv(p[2]);
+	glEnd();
+}
+void display()
+{
+	float x, y;
 	glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1, 0, 0);
-	glPointSize(5);
-	glBegin(GL_TRIANGLES);
-	glVertex2iv(p1);
-	glVertex2iv(p2);
-	glVertex2iv(p3);
-	//glVertex2iv(p4);
-	//glVertex2iv(p5);
-	glEnd();
+	drawtraiangle();
+	rtheta=(theta * 3.142) / 180;
+	for (int i = 0;i < 3;i++)
+	{
+		x = p[i][0];
+		y = p[i][1];
+		p[i][0] = xp + (x - xp) * cos(rtheta) - (y - yp) * sin(rtheta);
+		p[i][1] = yp + (x - xp) * sin(rtheta) + (y - yp) * cos(rtheta);
+	}
 	glColor3f(0, 1, 0);
-	glBegin(GL_POLYGON);
-	glVertex2iv(p1);
-	glVertex2iv(p2);
-	glVertex2iv(p5);
-	//glVertex2iv(p4);
-	glVertex2iv(p4);
-	glEnd();
+	drawtraiangle();
 	glFlush();
 }
-int main()
+int main(int argc,char**argv)
 {
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(500, 500);
-	glutInitWindowPosition(300, 150);
 	glutCreateWindow("triangle");
 	myinit();
-	glutDisplayFunc(disp);
+	printf("Enter the pointof rotation\n");
+	scanf_s("%f%f", &xp, &yp);
+	printf("Enter the angle of rotation\n");
+	scanf_s("%f", &theta);
+	glutDisplayFunc(display);
 	glutMainLoop();
-	return 0;
 }
